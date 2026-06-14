@@ -98,3 +98,13 @@
 .chip--danger { color: #e7a98f; background: transparent; border-color: rgba(217,134,107,0.35); }
 .chip--danger:hover { background: rgba(217,134,107,0.12); }
 .chip:focus-visible, .media-card__feature:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 2px; }
+
+/* ---------- Enquiries ---------- */
+.enq-head { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.4rem; }
+.enq-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.enq-table { width: 100%; border-collapse: collapse; font-size: var(--step--1); min-width: 760px; }
+.enq-table th, .enq-table td { text-align: left; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.enq-table thead th { background: rgba(207,161,104,0.08); color: var(--gold); position: sticky; top: 0; }
+.enq-table tbody tr:hover { background: rgba(207,161,104,0.04); }
+.enq-table a { color: var(--gold-hi); }
+.enq-msg { max-width: 360px; color: var(--text-dim); }

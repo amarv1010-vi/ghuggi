@@ -54,17 +54,30 @@ function send_mail(string $to, string $toName, string $subject, string $html, st
         return (bool) @file_put_contents($log, $entry, FILE_APPEND | LOCK_EX);
     }
 
+    // If SMTP is not configured yet, skip the network call entirely so the
+    // contact form never hangs. The enquiry is still saved to the database.
+    $smtpUser = (string) cfg('SMTP_USER', '');
+    $smtpPass = (string) cfg('SMTP_PASS', '');
+    if ($smtpUser === '' || $smtpPass === '') {
+        @file_put_contents(jsd_log_dir() . '/mail.log',
+            date('c') . " SKIPPED (SMTP not configured) -> {$to}: {$subject}\n", FILE_APPEND | LOCK_EX);
+        return false;
+    }
+
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
         $mail->Host       = (string) cfg('SMTP_HOST', 'smtp.titan.email');
         $mail->SMTPAuth   = true;
-        $mail->Username   = (string) cfg('SMTP_USER', '');
-        $mail->Password   = (string) cfg('SMTP_PASS', '');
+        $mail->Username   = $smtpUser;
+        $mail->Password   = $smtpPass;
         $secure           = strtolower((string) cfg('SMTP_SECURE', 'ssl'));
         $mail->SMTPSecure = $secure === 'tls' ? PHPMailer::ENCRYPTION_STARTTLS : PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = (int) cfg('SMTP_PORT', 465);
         $mail->CharSet    = 'UTF-8';
+        // Cap how long we wait so a slow/unreachable mail server cannot hang
+        // the form. The enquiry is already saved before this runs.
+        $mail->Timeout    = 12;
 
         $mail->setFrom((string) cfg('SMTP_FROM', cfg('SMTP_USER')), (string) cfg('SMTP_FROM_NAME', 'JSD Construction'));
         $mail->addAddress($to, $toName);

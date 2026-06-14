@@ -43,6 +43,7 @@ admin_head('Dashboard', true);
 <header class="admin-bar">
   <div class="admin-bar__brand">JSD <b>CONSTRUCTION</b><span>Admin</span></div>
   <div class="admin-bar__right">
+    <a class="admin-bar__view" href="enquiries.php">Enquiries</a>
     <a class="admin-bar__view" href="../index.php" target="_blank" rel="noopener">View site</a>
     <span class="admin-bar__user">Hi, <?= e($_SESSION['admin_username'] ?? 'admin') ?></span>
     <a class="btn btn--ghost btn--sm" href="logout.php">Log out</a>
