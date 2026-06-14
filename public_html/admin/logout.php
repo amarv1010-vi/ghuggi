@@ -1,3 +1,5 @@
 <?php
-// Admin logout
-// TODO Phase 7
+require_once __DIR__ . '/auth.php';
+admin_logout();
+header('Location: login.php');
+exit;
