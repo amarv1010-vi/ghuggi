@@ -131,23 +131,44 @@ function send_enquiry_emails(array $d): array
     );
     $alertOk = send_mail($deptEmail, 'JSD Construction', $alertSubject, $alertHtml, $alertText, $email, $name);
 
-    // --- Thank-you to customer ---
+    // --- Thank-you / auto-reply to customer (branded, light theme + signature) ---
     $thanksSubject = 'Thanks for contacting JSD Construction';
-    $thanksText = "Hi {$name},\n\nThanks for getting in touch with JSD Construction. "
-        . "We have received your enquiry and a member of our team will be in contact shortly.\n\n"
-        . "For anything urgent call us on +61 424 475 767 or message us on WhatsApp.\n\n"
-        . "JSD Construction Pty Ltd\nLuxury Built in Australia\n";
-    $thanksHtml = jsd_email_shell(
-        'Thanks for getting in touch',
-        '<p>Hi ' . e($name) . ',</p>'
-        . '<p>Thanks for contacting JSD Construction. We have received your enquiry and a member of our team will be in touch shortly.</p>'
-        . '<p>For anything urgent call us on <a href="tel:+61424475767">+61 424 475 767</a> or message us on '
-        . '<a href="https://wa.me/61424475767">WhatsApp</a>.</p>'
-        . '<p style="margin-top:18px;color:#9F7745">JSD Construction Pty Ltd<br>Luxury Built in Australia</p>'
-    );
+    $thanksText = "Hi {$name},\n\nThank you for reaching out to JSD Construction. "
+        . "We have received your enquiry and a member of our team will be in touch with you shortly.\n\n"
+        . "For anything urgent call us on 0424 475 767 or message us on WhatsApp.\n\n"
+        . "JSD Construction Pty Ltd\nLuxury custom build homes crafted without compromise\n"
+        . "0424 475 767 | info@jsdconstruction.com.au | jsdconstruction.com.au\n";
+    $intro = '<p style="margin:0 0 12px">Hi ' . e($name) . ',</p>'
+        . '<p style="margin:0 0 12px">Thank you for reaching out to JSD Construction. We have received your enquiry and a member of our team will be in touch with you shortly.</p>'
+        . '<p style="margin:0 0 20px">For anything urgent, call us on <a href="tel:+61424475767" style="color:#000">0424 475 767</a> or message us on <a href="https://wa.me/61424475767" style="color:#000">WhatsApp</a>.</p>';
+    $thanksHtml = '<!doctype html><html><body style="margin:0;background:#ffffff;padding:24px;'
+        . 'font-family:Arial,Helvetica,sans-serif;color:#1a1a1a">'
+        . '<div style="max-width:560px;margin:0 auto">'
+        . $intro
+        . '<div style="border-top:1px solid #e0e0e0;margin:18px 0"></div>'
+        . jsd_signature()
+        . '</div></body></html>';
     $customerOk = send_mail($email, $name, $thanksSubject, $thanksHtml, $thanksText, $deptEmail, 'JSD Construction');
 
     return ['alert' => $alertOk, 'customer' => $customerOk];
+}
+
+/** The JSD email signature block (client supplied). */
+function jsd_signature(): string
+{
+    return <<<HTML
+<table style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #1a1a1a; line-height: 1.6; max-width: 420px;">
+<tbody valign="middle">
+<tr valign="inherit"><td style="padding-bottom: 6px;" valign="inherit"><strong style="font-size: 17px; letter-spacing: 0.3px;">JSD Construction Pty Ltd</strong></td></tr>
+<tr valign="inherit"><td style="padding-bottom: 10px; color: #555;" valign="inherit">Luxury custom build homes crafted without compromise</td></tr>
+<tr valign="inherit"><td style="padding-bottom: 10px;" valign="inherit"><div style="width: 40px; height: 2px; background-color: #000;"><br></div></td></tr>
+<tr valign="inherit"><td style="padding-bottom: 10px;" valign="inherit"><a href="tel:+61424475767" style="color:#000; text-decoration:none;">&nbsp;&#128222; 0424 475 767</a><br><a href="mailto:info@jsdconstruction.com.au" style="color:#000; text-decoration:none;">&nbsp;&#9993;&#65039; info@jsdconstruction.com.au</a><br><a href="https://jsdconstruction.com.au" target="_blank" style="color:#000; text-decoration:none;">&nbsp;&#127760; jsdconstruction.com.au</a><br><span style="color:#777;">&#128205; Brisbane, Australia</span></td></tr>
+<tr valign="inherit"><td style="padding-bottom: 12px; color: #444;" valign="inherit">Bespoke design &amp; construction &middot; Premium materials &middot; Commercial-grade standards<br>High-end finishes &middot; Built for clients who expect the best</td></tr>
+<tr valign="inherit"><td style="padding-bottom: 12px;" valign="inherit"><a href="https://www.instagram.com/jsd.construction/" target="_blank" style="text-decoration:none; color:#000;"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="16" height="16" style="vertical-align: middle; border: medium;"> <span style="margin-left:6px;">Follow us on Instagram</span>&nbsp;</a></td></tr>
+<tr valign="inherit"><td style="border-top: 1px solid #e0e0e0; padding-top: 8px; font-size: 11px; color: #777;" valign="inherit">Confidential communication. If received in error, please delete. Information provided is general in nature and does not constitute formal building or engineering advice. No liability accepted for reliance on this email.</td></tr>
+</tbody>
+</table>
+HTML;
 }
 
 /** Minimal branded HTML email shell. */
