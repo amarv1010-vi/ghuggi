@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/csrf.php';
 require_once __DIR__ . '/api/gallery.php';
+
+$recaptchaKey = trim((string) cfg('RECAPTCHA_SITE_KEY'));
 
 $featured = featured_projects();
 $ongoing  = ongoing_photos();
@@ -26,6 +29,9 @@ $ongoing  = ongoing_photos();
   <link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 
   <link rel="stylesheet" href="assets/css/styles.css">
+  <?php if ($recaptchaKey !== ''): ?>
+  <script src="https://www.google.com/recaptcha/api.js?render=<?= e($recaptchaKey) ?>" async defer></script>
+  <?php endif; ?>
 </head>
 <body id="top">
 
@@ -239,15 +245,76 @@ $ongoing  = ongoing_photos();
     </div>
   </section>
 
-  <!-- ===================== Contact (built in Phase 5) ===================== -->
-  <section class="section" id="contact" aria-labelledby="contact-h">
+  <!-- ===================== Contact ===================== -->
+  <section class="section section--alt" id="contact" aria-labelledby="contact-h">
     <div class="container">
-      <div class="section__head">
-        <span class="eyebrow">Get in touch</span>
-        <h2 id="contact-h">Start your build</h2>
-        <p>Tell us about your project and the right team member will be in touch.</p>
+      <div class="contact__grid">
+        <div class="contact__intro">
+          <span class="eyebrow">Get in touch</span>
+          <h2 id="contact-h">Start your build</h2>
+          <p class="lead">Tell us about your project and the right team member will be in touch.</p>
+          <ul class="contact__list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.6a2 2 0 01-.5 2.1L8.1 9.6a16 16 0 006 6l1.2-1.1a2 2 0 012.1-.5c.8.3 1.7.5 2.6.6a2 2 0 011.7 2z"/></svg>
+              <a href="tel:+61424475767">+61 424 475 767</a>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+              <a href="mailto:contact@jsdconstruction.com.au">contact@jsdconstruction.com.au</a>
+            </li>
+          </ul>
+          <a class="btn btn--wa" href="https://wa.me/61424475767" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20"><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1012 2zm5.8 14.3c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6a10.6 10.6 0 01-4.1-3.6c-.3-.4-.9-1.3-.9-2.5s.6-1.8.9-2c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.1.2-.3.3-.1.6.2.4.8 1.3 1.6 1.9 1 .8 1.7 1 2 1.2.2.1.4.1.5-.1l.6-.7c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.3.1.2.1.5 0 .8z"/></svg>
+            Chat on WhatsApp
+          </a>
+        </div>
+
+        <form class="contact__form" id="contact-form" action="api/submit.php" method="post" novalidate data-recaptcha-key="<?= e($recaptchaKey) ?>">
+          <?= csrf_field() ?>
+          <!-- Honeypot: must stay empty. Hidden from users and assistive tech. -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label for="name">Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" required autocomplete="name" maxlength="120">
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input type="email" id="email" name="email" required autocomplete="email" maxlength="160">
+            </div>
+            <div class="field">
+              <label for="phone">Phone <span class="req">*</span></label>
+              <input type="tel" id="phone" name="phone" required autocomplete="tel" maxlength="40">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="department">Department <span class="req">*</span></label>
+            <select id="department" name="department" required>
+              <option value="contact">General enquiry</option>
+              <option value="quotes">Request a quote</option>
+              <option value="projects">Project discussion</option>
+              <option value="info">Information</option>
+              <option value="support">Support</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Message <span class="opt">(optional)</span></label>
+            <textarea id="message" name="message" rows="4" maxlength="3000"></textarea>
+          </div>
+
+          <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="">
+
+          <button type="submit" class="btn btn--gold btn--lg contact__submit">Send Enquiry</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
-      <p class="lead">Contact form coming in the next stage. In the meantime call <a href="tel:+61424475767">+61 424 475 767</a> or message us on <a href="https://wa.me/61424475767" target="_blank" rel="noopener">WhatsApp</a>.</p>
     </div>
   </section>
 
@@ -257,5 +324,6 @@ $ongoing  = ongoing_photos();
 
 <script src="assets/js/main.js" defer></script>
 <script src="assets/js/carousel.js" defer></script>
+<script src="assets/js/contact.js" defer></script>
 </body>
 </html>

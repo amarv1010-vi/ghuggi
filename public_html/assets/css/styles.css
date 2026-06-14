@@ -401,3 +401,36 @@ h3 { font-size: var(--step-2); }
 .carousel__btn--next { right: -6px; }
 .carousel__btn[hidden] { display: none; }
 @media (min-width: 900px) { .carousel__btn--prev { left: -22px; } .carousel__btn--next { right: -22px; } }
+
+/* ---------- Contact ---------- */
+.contact__grid { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 4rem); grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 880px) { .contact__grid { grid-template-columns: 0.9fr 1.1fr; } }
+.contact__intro .lead { margin-top: 1rem; }
+.contact__list { list-style: none; padding: 0; margin: 1.6rem 0; display: grid; gap: 0.9rem; }
+.contact__list li { display: flex; align-items: center; gap: 0.7rem; }
+.contact__list svg { width: 22px; height: 22px; color: var(--gold); flex: none; }
+
+.contact__form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.4rem, 1rem + 2vw, 2.2rem); box-shadow: var(--shadow-sm); }
+.field { margin-bottom: 1.1rem; }
+.field-row { display: grid; gap: 0 1rem; grid-template-columns: 1fr; }
+@media (min-width: 540px) { .field-row { grid-template-columns: 1fr 1fr; } }
+.contact__form label { display: block; font-size: var(--step--1); font-weight: 600; color: var(--offwhite); margin-bottom: 0.4rem; letter-spacing: 0.02em; }
+.contact__form .req { color: var(--gold); }
+.contact__form .opt { color: var(--text-dim); font-weight: 400; }
+.contact__form input, .contact__form select, .contact__form textarea {
+  width: 100%; font-family: var(--font-body); font-size: var(--step-0); color: var(--offwhite);
+  background: var(--charcoal); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 0.75rem 0.85rem; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.contact__form textarea { resize: vertical; min-height: 96px; }
+.contact__form select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23CFA168' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.85rem center; padding-right: 2.4rem; }
+.contact__form input:focus, .contact__form select:focus, .contact__form textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(207,161,104,0.18); }
+.contact__form input[aria-invalid="true"], .contact__form select[aria-invalid="true"], .contact__form textarea[aria-invalid="true"] { border-color: #d9866b; box-shadow: 0 0 0 3px rgba(217,134,107,0.18); }
+.field-error { display: block; color: #e7a98f; font-size: var(--step--1); margin-top: 0.35rem; }
+.contact__submit { width: 100%; justify-content: center; margin-top: 0.4rem; }
+.contact__submit[disabled] { opacity: 0.65; cursor: progress; }
+.form-status { margin-top: 1rem; font-size: var(--step--1); min-height: 1.2em; }
+.form-status.is-error { color: #e7a98f; }
+.form-status.is-success { color: #8fd6a6; }
+/* Honeypot - visually and semantically hidden from real users */
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
