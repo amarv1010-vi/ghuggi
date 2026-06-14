@@ -19,3 +19,6 @@ desktop.ini
 *~
 .idea/
 .vscode/
+
+# Sandbox test artifacts
+.sandbox/
