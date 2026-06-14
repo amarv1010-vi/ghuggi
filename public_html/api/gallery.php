@@ -109,6 +109,25 @@ function hero_image(): ?array
     return $any[0] ?? null;
 }
 
+/** Favicon source from the latest branding upload (the PNG thumb), or null. */
+function favicon_image(): ?array
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT thumb FROM media WHERE category = "branding" AND is_active = 1 AND thumb <> ""
+             ORDER BY created_at DESC LIMIT 1'
+        );
+        $stmt->execute();
+        $thumb = (string) $stmt->fetchColumn();
+    } catch (Throwable $e) {
+        return null;
+    }
+    if ($thumb === '') {
+        return null;
+    }
+    return ['src' => thumb_src($thumb)];
+}
+
 /** About image: a finished image that differs from the hero where possible. */
 function about_image(): ?array
 {

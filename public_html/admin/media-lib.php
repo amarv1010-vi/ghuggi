@@ -23,11 +23,28 @@ function uploads_root(): string
 function ensure_upload_dirs(): void
 {
     $root = uploads_root();
+    if (!is_dir($root)) {
+        @mkdir($root, 0755, true);
+    }
     foreach (array_merge(jsd_categories(), ['thumbs']) as $sub) {
         $dir = $root . '/' . $sub;
         if (!is_dir($dir)) {
             @mkdir($dir, 0755, true);
         }
+    }
+
+    // Belt-and-braces: drop a protective .htaccess so even a misconfigured
+    // server cannot execute scripts inside /uploads. The root .htaccess also
+    // blocks this, but uploads must be safe on its own.
+    $guard = $root . '/.htaccess';
+    if (!is_file($guard)) {
+        @file_put_contents($guard,
+            "Options -Indexes\n" .
+            "php_flag engine off\n" .
+            "<IfModule mod_php.c>\n  php_admin_flag engine off\n</IfModule>\n" .
+            "RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar\n" .
+            "<FilesMatch \"\\.(php|phtml|phar|pl|py|cgi|sh)$\">\n  Require all denied\n</FilesMatch>\n"
+        );
     }
 }
 

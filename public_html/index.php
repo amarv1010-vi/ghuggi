@@ -4,6 +4,33 @@ require_once __DIR__ . '/includes/csrf.php';
 require_once __DIR__ . '/api/gallery.php';
 
 $recaptchaKey = trim((string) cfg('RECAPTCHA_SITE_KEY'));
+$siteUrl = rtrim((string) cfg('SITE_URL'), '/');
+$favicon = function_exists('favicon_image') ? favicon_image() : null;
+$ogImage = hero_image();
+
+// JSON-LD GeneralContractor schema from the verified business facts.
+$schema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'GeneralContractor',
+    'name' => 'JSD Construction Pty Ltd',
+    'description' => 'Founder-led luxury home builder delivering high-set, low-set and split-level homes plus low-rise commercial across South East Queensland.',
+    'url' => $siteUrl . '/',
+    'telephone' => '+61424475767',
+    'founder' => ['@type' => 'Person', 'name' => 'Jagdeep Singh'],
+    'areaServed' => ['Brisbane', 'Gold Coast', 'Ipswich', 'Sunshine Coast'],
+    'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Brisbane', 'addressRegion' => 'QLD', 'addressCountry' => 'AU'],
+    'email' => 'contact@jsdconstruction.com.au',
+    'slogan' => 'Luxury Built in Australia',
+];
+if (($abn = trim((string) cfg('ABN'))) !== '') {
+    $schema['vatID'] = $abn;
+}
+if (($hours = trim((string) cfg('BUSINESS_HOURS'))) !== '') {
+    $schema['openingHours'] = $hours;
+}
+if ($ogImage) {
+    $schema['image'] = $siteUrl . '/' . ltrim($ogImage['src'], '/');
+}
 
 $featured = featured_projects();
 $ongoing  = ongoing_photos();
@@ -21,8 +48,23 @@ $ongoing  = ongoing_photos();
   <meta property="og:type" content="website">
   <meta property="og:title" content="JSD Construction | Luxury Built in Australia">
   <meta property="og:description" content="Founder-led luxury home building across South East Queensland.">
-  <meta property="og:url" content="<?= e(cfg('SITE_URL')) ?>/">
+  <meta property="og:url" content="<?= e($siteUrl) ?>/">
   <meta property="og:locale" content="en_AU">
+  <meta property="og:site_name" content="JSD Construction">
+  <?php if ($ogImage): ?><meta property="og:image" content="<?= e($siteUrl . '/' . ltrim($ogImage['src'], '/')) ?>"><?php endif; ?>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#16130F">
+
+  <!-- Favicon (from the admin Branding tab once uploaded) -->
+  <?php if ($favicon): ?>
+  <link rel="icon" type="image/png" href="<?= e($favicon['src']) ?>">
+  <link rel="apple-touch-icon" href="<?= e($favicon['src']) ?>">
+  <?php else: ?>
+  <link rel="icon" href="data:image/svg+xml,<?= rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#16130F"/><text x="16" y="22" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#CFA168" text-anchor="middle">J</text></svg>') ?>">
+  <?php endif; ?>
+
+  <!-- Structured data -->
+  <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 
   <!-- Preload self-hosted fonts -->
   <link rel="preload" href="assets/fonts/playfair-latin-var.woff2" as="font" type="font/woff2" crossorigin>
