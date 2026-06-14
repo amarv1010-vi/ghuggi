@@ -1,0 +1,2 @@
+# JSD Construction - root .htaccess (Phase 8 completes hardening)
+# Force HTTPS, security headers, deny config and internals, no exec in /uploads.
