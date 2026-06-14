@@ -3,6 +3,13 @@ require_once __DIR__ . '/includes/bootstrap.php';
 require_once __DIR__ . '/includes/csrf.php';
 require_once __DIR__ . '/api/gallery.php';
 
+// Start the session and create the CSRF token BEFORE any output. This sends the
+// session cookie and no-cache headers up front, so the contact form token is
+// valid and the page is never served stale (always reflects the latest photos).
+csrf_token();
+header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+
 $recaptchaKey = trim((string) cfg('RECAPTCHA_SITE_KEY'));
 $siteUrl = rtrim((string) cfg('SITE_URL'), '/');
 $favicon = function_exists('favicon_image') ? favicon_image() : null;
