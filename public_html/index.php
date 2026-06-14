@@ -1,4 +1,10 @@
-<?php require_once __DIR__ . '/includes/bootstrap.php'; ?>
+<?php
+require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/api/gallery.php';
+
+$featured = featured_projects();
+$ongoing  = ongoing_photos();
+?>
 <!doctype html>
 <html lang="en-AU">
 <head>
@@ -110,11 +116,24 @@
         <h2 id="featured-h">A selection of finished homes</h2>
         <p>Our proudest completed builds across South East Queensland.</p>
       </div>
-      <div class="empty-state" data-featured-empty>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5L5 21"/></svg>
-        <strong>Featured projects coming soon</strong>
-        <p>Our finished homes will appear here once the gallery is published.</p>
-      </div>
+<?php if ($featured): ?>
+        <div class="featured-grid">
+          <?php foreach ($featured as $item): ?>
+            <figure class="featured-card">
+              <img src="<?= e($item['src']) ?>" alt="<?= e($item['alt']) ?>" loading="lazy">
+              <?php if ($item['caption'] !== ''): ?>
+                <figcaption><?= e($item['caption']) ?></figcaption>
+              <?php endif; ?>
+            </figure>
+          <?php endforeach; ?>
+        </div>
+      <?php else: ?>
+        <div class="empty-state" data-featured-empty>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5L5 21"/></svg>
+          <strong>Featured projects coming soon</strong>
+          <p>Our finished homes will appear here once the gallery is published.</p>
+        </div>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -126,11 +145,34 @@
         <h2 id="photos-h">Ongoing builds</h2>
         <p>A look at the homes we are building right now. Drag, swipe or use the arrow keys to browse.</p>
       </div>
-      <div class="empty-state" data-photos-empty>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5L5 21"/></svg>
-        <strong>Build photos coming soon</strong>
-        <p>Current site progress will appear here as our team uploads it.</p>
-      </div>
+<?php if ($ongoing): ?>
+        <div class="carousel" data-carousel>
+          <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Previous photos" data-carousel-prev hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <ul class="carousel__track" data-carousel-track tabindex="0" role="list" aria-label="Ongoing build photos, scrollable">
+            <?php foreach ($ongoing as $item): ?>
+              <li class="carousel__item" role="listitem">
+                <figure>
+                  <img src="<?= e($item['src']) ?>" alt="<?= e($item['alt']) ?>" loading="lazy" draggable="false">
+                  <?php if ($item['caption'] !== ''): ?>
+                    <figcaption><?= e($item['caption']) ?></figcaption>
+                  <?php endif; ?>
+                </figure>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+          <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next photos" data-carousel-next hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      <?php else: ?>
+        <div class="empty-state" data-photos-empty>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5L5 21"/></svg>
+          <strong>Build photos coming soon</strong>
+          <p>Current site progress will appear here as our team uploads it.</p>
+        </div>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -214,5 +256,6 @@
 <?php require __DIR__ . '/includes/footer.php'; ?>
 
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/carousel.js" defer></script>
 </body>
 </html>
