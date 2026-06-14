@@ -244,3 +244,105 @@ h3 { font-size: var(--step-2); }
   border: 1px solid var(--line); background: rgba(207, 161, 104, 0.07);
   font-size: var(--step--1); color: var(--gold-hi); font-weight: 500;
 }
+
+/* =====================================================================
+   Sections (Phase 3+)
+   ===================================================================== */
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  min-height: min(92vh, 820px);
+  display: flex; align-items: center;
+  padding-block: clamp(4rem, 3rem + 6vw, 8rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+.hero__bg { position: absolute; inset: 0; z-index: -2; }
+.hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+/* Gradient placeholder shown until a featured image is uploaded */
+.hero__placeholder {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    radial-gradient(1200px 600px at 75% 10%, rgba(207, 161, 104, 0.22), transparent 60%),
+    radial-gradient(900px 500px at 10% 90%, rgba(123, 97, 58, 0.28), transparent 55%),
+    var(--grad-dark);
+}
+.hero__scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(18,15,11,0.86) 0%, rgba(18,15,11,0.55) 45%, rgba(18,15,11,0.25) 100%); }
+.hero__inner { max-width: 46rem; }
+.hero h1 { margin-top: 0.4rem; }
+.hero p { margin-top: 1.2rem; max-width: 40ch; }
+.hero .cta-row { margin-top: 2rem; }
+
+/* ---------- Trust strip ---------- */
+.trust { background: #100d0a; border-block: 1px solid var(--line); }
+.trust__grid { display: grid; gap: 1.2rem; grid-template-columns: 1fr; padding-block: 1.8rem; }
+@media (min-width: 720px) { .trust__grid { grid-template-columns: repeat(3, 1fr); } }
+.trust__item { display: flex; align-items: center; gap: 0.85rem; }
+.trust__item svg { flex: none; width: 30px; height: 30px; color: var(--gold); }
+.trust__item strong { display: block; color: var(--offwhite); font-size: var(--step-0); }
+.trust__item span { color: var(--text-dim); font-size: var(--step--1); }
+
+/* ---------- Card grids ---------- */
+.cards { display: grid; gap: var(--gap); grid-template-columns: 1fr; }
+@media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .cards--4 { grid-template-columns: repeat(4, 1fr); } }
+
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.6rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover { transform: translateY(-4px); border-color: rgba(207,161,104,0.4); box-shadow: var(--shadow-sm); }
+.card__icon { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: rgba(207,161,104,0.1); border: 1px solid var(--line); margin-bottom: 1rem; }
+.card__icon svg { width: 24px; height: 24px; color: var(--gold); }
+.card h3 { font-size: var(--step-1); margin-bottom: 0.5rem; }
+.card p { color: var(--text-dim); font-size: var(--step--1); }
+
+/* ---------- About ---------- */
+.about__grid { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 4rem); grid-template-columns: 1fr; align-items: center; }
+@media (min-width: 900px) { .about__grid { grid-template-columns: 1.1fr 0.9fr; } }
+.about__media {
+  aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--line); background:
+    radial-gradient(600px 300px at 70% 20%, rgba(207,161,104,0.18), transparent 60%), var(--grad-dark);
+  display: grid; place-items: center; color: var(--gold-2);
+}
+.about__media img { width: 100%; height: 100%; object-fit: cover; }
+.about p + p { margin-top: 1rem; color: var(--text-dim); }
+.signature { font-family: var(--font-display); font-style: italic; color: var(--gold-hi); font-size: var(--step-1); margin-top: 1.4rem; }
+
+/* ---------- Process timeline ---------- */
+.process__list { display: grid; gap: 1.1rem; grid-template-columns: 1fr; counter-reset: step; }
+@media (min-width: 700px) { .process__list { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1050px) { .process__list { grid-template-columns: repeat(3, 1fr); } }
+.process__step {
+  position: relative; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.5rem 1.4rem 1.4rem;
+}
+.process__step::before {
+  counter-increment: step; content: counter(step, decimal-leading-zero);
+  font-family: var(--font-display); font-size: 1.6rem; color: var(--gold);
+  display: block; margin-bottom: 0.6rem;
+}
+.process__step h3 { font-size: var(--step-1); margin-bottom: 0.4rem; }
+.process__step p { color: var(--text-dim); font-size: var(--step--1); }
+
+/* ---------- Service areas ---------- */
+.areas__grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 760px) { .areas__grid { grid-template-columns: repeat(5, 1fr); } }
+.area {
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 1.4rem 1rem; text-align: center; background: rgba(207,161,104,0.05);
+  font-weight: 600; color: var(--offwhite); letter-spacing: 0.02em;
+}
+.area span { display: block; color: var(--gold-2); font-size: var(--step--1); font-weight: 500; margin-top: 0.2rem; }
+
+/* ---------- Empty states (media not yet uploaded) ---------- */
+.empty-state {
+  border: 1px dashed rgba(207,161,104,0.35); border-radius: var(--radius);
+  padding: clamp(2rem, 1.5rem + 3vw, 3.5rem); text-align: center;
+  background: rgba(207,161,104,0.04); color: var(--text-dim);
+}
+.empty-state svg { width: 42px; height: 42px; color: var(--gold-2); margin: 0 auto 0.8rem; }
+.empty-state strong { display: block; color: var(--offwhite); font-size: var(--step-1); font-family: var(--font-display); margin-bottom: 0.3rem; }
