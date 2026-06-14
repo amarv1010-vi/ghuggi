@@ -55,10 +55,37 @@ jsd_config/config.php
 public_html/uploads/{ongoing,finished,branding,thumbs}/
 ```
 
+## Client admin
+
+After deploy the client manages all content at `/admin` with no cPanel or FTP:
+
+1. `/admin/setup.php` once to create the login (then it locks).
+2. Log in at `/admin`, then use the **Ongoing**, **Finished** and **Branding**
+   folders to upload, caption, reorder, hide/show, delete and feature images.
+3. Every change shows on the public site on the next page load.
+
+## Local / sandbox testing
+
+The MySQL parts assume GoDaddy. For local testing you can point `DB_DSN` in a
+`jsd_config/config.php` at SQLite and set `APP_ENV=dev` (emails are written to
+`logs/mail.log` instead of being sent). `DB_DSN` is for testing only and stays
+unset in production.
+
+## Outstanding business facts (ASK-ME)
+
+Supplied via `jsd_config/config.php`, with visible placeholders until then:
+QBCC licence number, ABN and business hours. The admin path is `/admin`.
+
+## Third-party code
+
+PHPMailer 6.9.3 is vendored under `public_html/vendor/` (LGPL-2.1). Fonts are
+Playfair Display and Inter, self-hosted under `assets/fonts/` (SIL OFL 1.1).
+
 ## Deploy
 
-See `docs/DEPLOY.md` for the full cPanel go-live runbook.
+See `docs/DEPLOY.md` for the full cPanel go-live runbook, and `docs/QUALITY.md`
+for the security, SEO, performance and accessibility notes.
 
 ## Status
 
-Built in gated phases. See commit history.
+Built in gated phases 0 to 9. See commit history.
