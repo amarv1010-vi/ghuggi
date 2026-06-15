@@ -1,0 +1,27 @@
+# Secrets and server-only config (never commit)
+jsd_config/
+config.php
+public_html/config.php
+
+# Client-uploaded content lives on the server and must survive redeploys
+public_html/uploads/
+
+# Logs
+logs/
+public_html/logs/
+*.log
+
+# OS and editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/
+
+# Sandbox test artifacts
+.sandbox/
+
+# Client photo/video folders (uploaded via File Manager, survive redeploys)
+public_html/Data/

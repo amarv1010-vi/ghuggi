@@ -1,0 +1,64 @@
+# =====================================================================
+# JSD Construction - root .htaccess (Apache 2.4 / cPanel)
+# This file lives in public_html, which is also the parent of any addon
+# domains (e.g. amarvi.in). To avoid affecting other sites on this account,
+# the security headers and file-deny rules are scoped to the JSD hostnames
+# with <If>. The HTTPS redirect and caching are safe for all domains.
+# =====================================================================
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php index.html
+
+# ---------- Force HTTPS (safe for every domain on the account) ----------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Block execution of any script that gets into the JSD uploads/Data folders.
+  RewriteRule ^(uploads|Data)/.*\.(php|phtml|php[0-9]?|phar|pht|cgi|pl|py|asp|aspx|sh)$ - [F,NC]
+</IfModule>
+
+# ---------- JSD-only hardening (scoped by hostname) ----------
+<If "%{HTTP_HOST} =~ /jsdconstruction\.com\.au$/i">
+  <IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" "expr=%{HTTPS} == 'on'"
+    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' https://www.google.com https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' https://www.google.com; form-action 'self'"
+    Header set X-Permitted-Cross-Domain-Policies "none"
+  </IfModule>
+
+  # Deny sensitive files and include-only PHP, JSD site only.
+  <FilesMatch "(composer\.(json|lock)|\.(sample|sql|log|ini|sh|bak)$)">
+    Require all denied
+  </FilesMatch>
+  <FilesMatch "^(bootstrap|csrf|db|mailer|media-lib|layout|auth)\.php$">
+    Require all denied
+  </FilesMatch>
+</If>
+
+# ---------- Static asset caching (safe for all domains) ----------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ---------- Compression ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>

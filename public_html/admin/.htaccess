@@ -1,0 +1,11 @@
+# JSD Construction - admin extra hardening
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
+# Include-only helpers must never be requested directly.
+<FilesMatch "^(auth|layout|media-lib)\.php$">
+  Require all denied
+</FilesMatch>
