@@ -108,6 +108,19 @@ $ongoing  = ongoing_photos();
         </div>
       </div>
     </div>
+    <div class="hero__cue" aria-hidden="true">Scroll<span></span></div>
+  </section>
+
+  <!-- ===================== Stats band ===================== -->
+  <section class="stats" aria-label="At a glance">
+    <div class="container">
+      <div class="stats__row">
+        <div class="stat"><span class="stat__num">100%</span><span class="stat__label">In-house team</span></div>
+        <div class="stat"><span class="stat__num">6</span><span class="stat__label">Stage build process</span></div>
+        <div class="stat"><span class="stat__num">4+</span><span class="stat__label">Regions served</span></div>
+        <div class="stat"><span class="stat__num">1</span><span class="stat__label">Accountable team</span></div>
+      </div>
+    </div>
   </section>
 
   <!-- ===================== Trust strip ===================== -->
@@ -228,6 +241,61 @@ $ongoing  = ongoing_photos();
           <p>Current site progress will appear here as our team uploads it.</p>
         </div>
       <?php endif; ?>
+    </div>
+  </section>
+
+  <!-- ===================== Testimonials ===================== -->
+  <!-- EDIT ME: replace these placeholder quotes and names with real client
+       reviews before launch. Keep three for the layout. -->
+  <section class="section" id="testimonials" aria-labelledby="testimonials-h">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Client stories</span>
+        <h2 id="testimonials-h">Trusted by homeowners across SE QLD</h2>
+        <p>A few words from the people we have built for.</p>
+      </div>
+      <div class="testimonials">
+        <figure class="testimonial">
+          <div class="testimonial__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <blockquote><p>From the first site visit to handover, the JSD team kept everything in-house and on schedule. The finish on our home is exceptional.</p></blockquote>
+          <figcaption class="testimonial__who">
+            <span class="testimonial__avatar">R</span>
+            <span><span class="testimonial__name">Rajdeep &amp; Family</span><br><span class="testimonial__role">High-set home, Brisbane</span></span>
+          </figcaption>
+        </figure>
+        <figure class="testimonial">
+          <div class="testimonial__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <blockquote><p>Jagdeep was hands-on the entire build. Clear communication, premium materials and a result that genuinely feels custom.</p></blockquote>
+          <figcaption class="testimonial__who">
+            <span class="testimonial__avatar">S</span>
+            <span><span class="testimonial__name">Sarah M.</span><br><span class="testimonial__role">Split-level home, Gold Coast</span></span>
+          </figcaption>
+        </figure>
+        <figure class="testimonial">
+          <div class="testimonial__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <blockquote><p>They designed for our block and the QLD climate beautifully. Energy-efficient, light-filled and built to last. Highly recommend.</p></blockquote>
+          <figcaption class="testimonial__who">
+            <span class="testimonial__avatar">D</span>
+            <span><span class="testimonial__name">David &amp; Anita</span><br><span class="testimonial__role">Low-set home, Ipswich</span></span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Partners / standards ===================== -->
+  <!-- EDIT ME: swap these placeholder marks for real supplier/partner logos
+       (upload as images and replace the SVGs) when available. -->
+  <section class="section section--alt partners" aria-label="Standards and partners">
+    <div class="container">
+      <p class="partners__eyebrow">Built to premium materials &amp; standards</p>
+      <div class="partners__row">
+        <div class="partner" title="Partner logo placeholder"><svg viewBox="0 0 120 40" aria-hidden="true"><rect x="2" y="10" width="20" height="20" rx="4" fill="currentColor"/><text x="30" y="26" font-family="Georgia,serif" font-size="16" fill="currentColor">Timberline</text></svg></div>
+        <div class="partner" title="Partner logo placeholder"><svg viewBox="0 0 120 40" aria-hidden="true"><circle cx="14" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="3"/><text x="32" y="26" font-family="Arial" font-size="15" font-weight="700" fill="currentColor">NorthCo</text></svg></div>
+        <div class="partner" title="Partner logo placeholder"><svg viewBox="0 0 120 40" aria-hidden="true"><polygon points="14,6 26,30 2,30" fill="currentColor"/><text x="32" y="26" font-family="Arial" font-size="15" fill="currentColor">Apex</text></svg></div>
+        <div class="partner" title="Partner logo placeholder"><svg viewBox="0 0 120 40" aria-hidden="true"><rect x="3" y="8" width="22" height="22" rx="11" fill="none" stroke="currentColor" stroke-width="3"/><text x="32" y="26" font-family="Georgia,serif" font-size="15" fill="currentColor">Lumen</text></svg></div>
+        <div class="partner" title="Partner logo placeholder"><svg viewBox="0 0 120 40" aria-hidden="true"><path d="M4 28 L14 8 L24 28 Z" fill="none" stroke="currentColor" stroke-width="3"/><text x="32" y="26" font-family="Arial" font-size="15" font-weight="700" fill="currentColor">Forge</text></svg></div>
+      </div>
     </div>
   </section>
 

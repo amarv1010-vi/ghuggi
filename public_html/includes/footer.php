@@ -35,3 +35,6 @@
     </div>
   </div>
 </footer>
+<div class="builder-credit">
+  Designed &amp; built by <a href="https://amarvi.in" target="_blank" rel="noopener">Amarvi Pvt Ltd</a>
+</div>
