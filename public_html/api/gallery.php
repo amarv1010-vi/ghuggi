@@ -13,6 +13,7 @@
  */
 
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/folder-gallery.php';
 
 /** Web path to the uploads directory, relative to the web root. */
 function uploads_base(): string
@@ -79,28 +80,43 @@ function gallery_items(string $category, bool $featuredOnly = false, int $limit 
     return $out;
 }
 
-/** Latest active branding image (logo) for the header, or null. */
+/** Logo for the header. Prefers Data/logo folder, else DB branding. */
 function branding_logo(): ?array
 {
+    if (data_has('logo')) {
+        $items = data_items('logo', 260, 1);
+        return $items[0] ?? null;
+    }
     $items = gallery_items('branding', false, 1);
     return $items[0] ?? null;
 }
 
-/** Top finished projects flagged featured, capped at 3, for the Featured block. */
+/** Completed projects for the Featured block. Prefers Data/finished folder. */
 function featured_projects(): array
 {
+    if (data_has('finished')) {
+        // Show all finished photos from the folder so nothing goes to waste.
+        return data_items('finished', 1000);
+    }
     return gallery_items('finished', true, 3);
 }
 
-/** Ongoing builds for the Photos carousel. */
+/** Ongoing builds for the Photos carousel. Prefers Data/ongoing folder. */
 function ongoing_photos(): array
 {
+    if (data_has('ongoing')) {
+        return data_items('ongoing', 1000);
+    }
     return gallery_items('ongoing');
 }
 
-/** Hero background: first featured finished image, else first finished, else null. */
+/** Hero background: first finished image (Data folder preferred), else DB. */
 function hero_image(): ?array
 {
+    if (data_has('finished')) {
+        $items = data_items('finished', 1800, 1);
+        return $items[0] ?? null;
+    }
     $f = gallery_items('finished', true, 1);
     if ($f) {
         return $f[0];
@@ -109,9 +125,15 @@ function hero_image(): ?array
     return $any[0] ?? null;
 }
 
-/** Favicon source from the latest branding upload (the PNG thumb), or null. */
+/** Favicon source. Prefers Data/logo, else DB branding thumb. */
 function favicon_image(): ?array
 {
+    if (data_has('logo')) {
+        $items = data_files('logo');
+        if ($items) {
+            return ['src' => data_url($items[0], 96)];
+        }
+    }
     try {
         $stmt = db()->prepare(
             'SELECT thumb FROM media WHERE category = "branding" AND is_active = 1 AND thumb <> ""
@@ -131,6 +153,10 @@ function favicon_image(): ?array
 /** About image: a finished image that differs from the hero where possible. */
 function about_image(): ?array
 {
+    if (data_has('finished')) {
+        $items = data_items('finished', 900, 4);
+        return $items[1] ?? ($items[0] ?? null);
+    }
     $items = gallery_items('finished', false, 4);
     if (count($items) >= 2) {
         return $items[1];

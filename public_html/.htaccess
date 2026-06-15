@@ -16,8 +16,8 @@ DirectoryIndex index.php index.html
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Block execution of any script that gets into the JSD uploads folder.
-  RewriteRule ^uploads/.*\.(php|phtml|php[0-9]?|phar|pht|cgi|pl|py|asp|aspx|sh)$ - [F,NC]
+  # Block execution of any script that gets into the JSD uploads/Data folders.
+  RewriteRule ^(uploads|Data)/.*\.(php|phtml|php[0-9]?|phar|pht|cgi|pl|py|asp|aspx|sh)$ - [F,NC]
 </IfModule>
 
 # ---------- JSD-only hardening (scoped by hostname) ----------
